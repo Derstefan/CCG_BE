@@ -9,9 +9,7 @@ import com.ccg.ccgbe.cardgame.state.map.Pos;
 
 public abstract class Condition {
 
-
     public abstract boolean check(CardGameState state);
-
 
     public AndCondition AND(Condition cond2){
         return new AndCondition(this,cond2);
@@ -33,4 +31,8 @@ public abstract class Condition {
         //do nothing by default
         return null;
     }
+
+
+    public abstract String toString();
+
 }

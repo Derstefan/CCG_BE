@@ -22,4 +22,9 @@ public class MoreElementsCondition extends StateCondition {
         int n2 = MapUtil.getNumberOfElements(state,than);
         return n1>n2;
     }
+
+    @Override
+    public String toString() {
+        return null;
+    }
 }

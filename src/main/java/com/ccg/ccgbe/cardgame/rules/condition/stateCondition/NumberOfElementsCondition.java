@@ -22,6 +22,11 @@ public class NumberOfElementsCondition extends StateCondition {
         return MapUtil.getNumberOfElements(state,element)>=number;
     }
 
+    @Override
+    public String toString() {
+        return null;
+    }
+
     public int getNumber() {
         return number;
     }

@@ -4,6 +4,7 @@ package com.ccg.ccgbe.controller;
 import com.ccg.ccgbe.GameManager.GameManager;
 import com.ccg.ccgbe.cardgame.CardGame;
 import com.ccg.ccgbe.cardgame.bot.SimpleBot;
+import com.ccg.ccgbe.cardgame.draw.DoNothingDraw;
 import com.ccg.ccgbe.cardgame.draw.PlaceCardDraw;
 import com.ccg.ccgbe.cardgame.state.map.Pos;
 import com.ccg.ccgbe.dto.GameDataDTO;
@@ -48,6 +49,13 @@ public class CardGameController {
     public ResponseEntity<GameDataDTO> ramdomDraw(){
         CardGame game = gameManager.getFirstGame();
         SimpleBot.doDrawOn(game);
+        return ResponseEntity.ok(game.getDTO());
+    }
+
+    @GetMapping("endTurn")
+    public ResponseEntity<GameDataDTO> endTurn(){
+        CardGame game = gameManager.getFirstGame();
+        game.doDraw(new DoNothingDraw(game.getTurn()));
         return ResponseEntity.ok(game.getDTO());
     }
 

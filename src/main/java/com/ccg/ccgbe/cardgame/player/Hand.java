@@ -21,6 +21,10 @@ public class Hand {
         return cards;
     }
 
+
+    public int size(){
+        return cards.size();
+    }
     public Card getCard(int index){
         if(cards.isEmpty())return null;
         return cards.get(index);

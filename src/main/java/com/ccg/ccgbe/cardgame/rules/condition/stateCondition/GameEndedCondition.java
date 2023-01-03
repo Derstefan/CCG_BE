@@ -9,4 +9,9 @@ public class GameEndedCondition extends StateCondition {
     public boolean check(CardGameState state) {
         return state.isGameEnded();
     }
+
+    @Override
+    public String toString() {
+        return null;
+    }
 }

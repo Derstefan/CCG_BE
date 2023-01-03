@@ -7,6 +7,7 @@ import com.ccg.ccgbe.cardgame.state.map.Pos;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 
 public class AroundCondition extends StatePosCondition{
 
@@ -14,15 +15,43 @@ public class AroundCondition extends StatePosCondition{
 
     private int number;
 
-    public AroundCondition(int number,Element ... aroundElements) {
+    private int radius;
+
+    private EComparator comp;
+
+    public AroundCondition(EComparator comp,int radius,int number,Element ... aroundElements) {
         this.aroundElements = aroundElements;
+        this.comp = comp;
         this.number=number;
+        this.radius = radius;
     }
 
-    public AroundCondition(Element aroundElement) {
-        this.aroundElements = new Element[1];
-        aroundElements[0] = aroundElement;
+    public AroundCondition(EComparator comp,int number,Element ... aroundElements) {
+        this.aroundElements = aroundElements;
+        this.comp = comp;
+        this.number=number;
+        this.radius = 1;
+    }
+
+    public AroundCondition(int min,int radius,Element ... aroundElements) {
+        this.aroundElements = aroundElements;
+        this.comp = EComparator.min;
+        this.number=min;
+        this.radius = radius;
+    }
+
+    public AroundCondition(int min,Element ... aroundElements) {
+        this.aroundElements = aroundElements;
+        this.comp = EComparator.min;
+        this.number=min;
+        this.radius = 1;
+    }
+
+    public AroundCondition(Element ... aroundElement) {
+        this.aroundElements = aroundElements;
+        this.comp = EComparator.min;
         this.number =1;
+        this.radius = 1;
     }
 
     public Element[] getAroundElements() {
@@ -37,8 +66,8 @@ public class AroundCondition extends StatePosCondition{
     public boolean check(CardGameState state) {
         Pos pos = getPos();
         int num=0;
-        for(int i=-1;i<=1;i++){
-            for(int j=-1;j<=1;j++){
+        for(int i=-1*radius;i<=1*radius;i++){
+            for(int j=-1*radius;j<=1*radius;j++){
                 Pos indexPos = pos.plus(new Pos(i,j));
                 if(state.isOnMap(indexPos)){
                     Element indexElement = state.getElementAt(indexPos);
@@ -48,9 +77,15 @@ public class AroundCondition extends StatePosCondition{
                 }
             }
         }
-        if(num>=number){
+        if(comp.compare(number,num)){
             return true;
         }
         return false;
+    }
+    @Override
+    public String toString(){
+        StringBuilder sb = new StringBuilder("");
+        Arrays.stream(aroundElements).forEach(s->sb.append(","+s));
+        return comp + "" + radius + "(" +number+","+ sb.toString() +")";
     }
 }

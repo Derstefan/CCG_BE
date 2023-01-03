@@ -26,4 +26,9 @@ public class NotCondition extends Condition {
     public void setPos(Pos pos){
         cond.setPos(pos);
     }
+
+    @Override
+    public String toString(){
+        return "NOT(" + cond.toString() + ")";
+    }
 }

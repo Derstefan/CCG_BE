@@ -11,4 +11,9 @@ public class AlwaysTrueCondition extends Condition {
     public boolean check(CardGameState state) {
         return true;
     }
+
+    @Override
+    public String toString() {
+        return "true";
+    }
 }

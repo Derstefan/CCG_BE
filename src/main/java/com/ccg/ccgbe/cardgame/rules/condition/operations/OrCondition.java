@@ -33,4 +33,9 @@ public class OrCondition extends Condition {
         cond1.setPos(pos);
         cond2.setPos(pos);
     }
+
+    @Override
+    public String toString(){
+        return "("+cond1.toString() + " OR " + cond2.toString()+")";
+    }
 }

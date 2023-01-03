@@ -1,9 +1,6 @@
 package com.ccg.ccgbe.cardgame.builder.EarthAirFireBuilder;
 
 
-import com.ccg.ccgbe.cardgame.builder.RulesBuilder;
-import com.ccg.ccgbe.cardgame.builder.core.ConditionBuilder;
-import com.ccg.ccgbe.cardgame.builder.core.RuleBuilder;
 import com.ccg.ccgbe.cardgame.rules.Rules;
 import com.ccg.ccgbe.cardgame.rules.condition.Condition;
 import com.ccg.ccgbe.cardgame.rules.condition.stateCondition.StateCondition;
@@ -11,9 +8,8 @@ import com.ccg.ccgbe.cardgame.rules.element.ElementCollector;
 import com.ccg.ccgbe.cardgame.rules.rule.Rule;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 
-public class EarthWaterAirFireBuilder extends RulesBuilder {
+public class EarthWaterAirFireBuilder {
 
     private ElementCollector E;
     private ArrayList<Rule> ruleSet = new ArrayList<>();

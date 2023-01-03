@@ -2,6 +2,8 @@ package com.ccg.ccgbe.cardgame.builder.core;
 
 
 import com.ccg.ccgbe.cardgame.rules.condition.Condition;
+import com.ccg.ccgbe.cardgame.rules.condition.statePosConition.AroundCondition;
+import com.ccg.ccgbe.cardgame.rules.condition.statePosConition.EComparator;
 import com.ccg.ccgbe.cardgame.rules.condition.statePosConition.ElementCondition;
 import com.ccg.ccgbe.cardgame.rules.condition.statePosConition.EmptyElementCondition;
 import com.ccg.ccgbe.cardgame.rules.element.Element;
@@ -9,7 +11,9 @@ import com.ccg.ccgbe.cardgame.rules.element.ElementCollector;
 import com.ccg.ccgbe.cardgame.rules.rule.Rule;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Objects;
 
 public class RuleBuilder {
 
@@ -25,15 +29,6 @@ public class RuleBuilder {
     }
 
 
-    /**
-     * Expand with condition of min of expanding Elements
-     * @param A expander
-     * @param B defender
-     * @param minA min number of A elements around the expanding B-cell
-     */
-    public void expand(String A, String B,int minA){
-        rule(A,B,cb.around(minA,A));
-    }
 
     /**
      * Expand with condition of min third Elements
@@ -44,8 +39,11 @@ public class RuleBuilder {
      */
     public void expand(String A, String B,int minC,String ... C){
 
-        rule(A,B,cb.around(minC,C));
+        Rule r = rule(A,B,cb.around(minC,C));
+        r.setDescription(A + " needs " + minC + " " + Arrays.stream(C).map(s -> " "+ s +" ") + "s to put over" + B);
     }
+
+
 
     /**
      * Expand with condition of min third Elements
@@ -57,7 +55,15 @@ public class RuleBuilder {
     public void expand(String A, String B,int minC,String C){
         String[] elements = new String[1];
         elements[0] = C;
-        rule(A,B,cb.around(minC,elements));
+        Rule r = rule(A,B,cb.around(minC,elements));
+        r.setDescription(A + " needs " + minC + " " + C + "s to put over" + B);
+    }
+
+    public void exactDirectNeighbour(String A, String B,int numC,String C){
+        String[] elements = new String[1];
+        elements[0] = C;
+        Rule r = rule(A,B,cb.exactDirectNeighbours(numC,elements));
+        r.setDescription(A + " needs exact " + numC + " " + C + "s to put over" + B);
     }
 
 
@@ -82,48 +88,31 @@ public class RuleBuilder {
         rule(B,A,cb.around(minB,B));
     }
 
-    public void border(String A, String B){
-        // A around> B around
-//        new Rule("A",)
-    }
 
 
-    public void rule(String A, String B){
+
+    public Rule rule(String A, String B, Condition when){
         if(!E.containsElement(A) || !E.containsElement(B)){
             throw new IllegalArgumentException();
         }
         Element e1 = E.get(A);
         Element e2 = E.get(B);
-        ruleSet.add(new Rule(e1,new ElementCondition(e2)));
+        Rule rule =new Rule(e1,new ElementCondition(e2).AND(when));
+        ruleSet.add(rule);
+        return rule;
     }
 
-    public void rule(String A, String B, Condition when){
-        if(!E.containsElement(A) || !E.containsElement(B)){
-            throw new IllegalArgumentException();
+
+
+    public void ruleSet(String A,String Es,Condition when){
+        String[] elements = Es.split(",\\s*");
+        for (String s:elements){
+            rule(A,s,when);
         }
-        Element e1 = E.get(A);
-        Element e2 = E.get(B);
-        ruleSet.add(new Rule(e1,new ElementCondition(e2).AND(when)));
-    }
-
-    public void rule(String A, Condition condition){
-        if(!E.containsElement(A)){
-            throw new IllegalArgumentException();
-        }
-        Element e = E.get(A);
-        ruleSet.add(new Rule(e,condition));
     }
 
 
 
-    //can put over empty cell
-    public void rule(String A){
-        Element e = E.get(A);
-        if(!E.containsElement(A)){
-            throw new IllegalArgumentException();
-        }
-        ruleSet.add( new Rule(e, new EmptyElementCondition()));
-    }
 
 
     public ArrayList<Rule> createRuleSet(){

@@ -1,6 +1,7 @@
 package com.ccg.ccgbe.cardgame.player;
 
 
+import com.ccg.ccgbe.cardgame.builder.Config;
 import com.ccg.ccgbe.cardgame.card.Card;
 import com.ccg.ccgbe.dto.PlayerDTO;
 
@@ -35,6 +36,9 @@ public class Player {
     }
 
     public void drawNewCard(){
+        if(hand.size()>= Config.HAND_MAX_SIZE){
+            return;
+        }
         Optional<Card> card = deck.getCard();
         if(card.isPresent()){
             deck.removeCard();

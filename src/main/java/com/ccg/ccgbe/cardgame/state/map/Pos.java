@@ -40,4 +40,18 @@ public class Pos {
         return "("+x+","+y+")";
     }
 
+    public static Pos IPos(int index){
+        switch (index){
+            case 0: return new Pos(-1,-1);
+            case 1: return new Pos(0,-1);
+            case 2: return new Pos(1,-1);
+
+            case 3: return new Pos(1,0);
+            case 4: return new Pos(1,1);
+            case 5: return new Pos(0,1);
+            case 6: return new Pos(-1,1);
+            default: return new Pos(-1,0);
+        }
+    }
+
 }

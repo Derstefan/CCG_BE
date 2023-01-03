@@ -55,6 +55,17 @@ public class Rules {
         return Optional.empty();
     }
 
+    public HashSet<Rule> getRulesWithpossibleChange(CardGameState state, Pos pos){
+        //put it in state
+        HashSet<Rule> possibleRules = new HashSet<>();
+        for(Rule r: ruleSet){
+                if(r.check(state,pos)){
+                    possibleRules.add(r);
+                }
+        }
+        return possibleRules;
+    }
+
     public ArrayList<Rule> getAutomaticEuleSet() {
         return automaticEuleSet;
     }
@@ -90,5 +101,19 @@ public class Rules {
 
     public ElementCollector getE() {
         return E;
+    }
+
+
+    @Override
+    public String toString() {
+
+        String str = "\n\n";
+        for (Rule r:ruleSet){
+            str+=r.toString() + "\n";
+        }
+        return "Rules{" +
+                "E=" + E +
+                ", ruleSet=" + str+
+                '}';
     }
 }

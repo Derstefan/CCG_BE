@@ -3,6 +3,7 @@ package com.ccg.ccgbe.cardgame.state;
 
 
 import com.ccg.ccgbe.cardgame.card.Card;
+import com.ccg.ccgbe.cardgame.events.EventHistroy;
 import com.ccg.ccgbe.cardgame.rules.Rules;
 import com.ccg.ccgbe.cardgame.rules.element.EType;
 import com.ccg.ccgbe.cardgame.rules.element.Element;
@@ -28,6 +29,8 @@ public class CardGameState {
 
     //toEstage
     private boolean gameEnded = false;
+
+    private EventHistroy eventHistroy = new EventHistroy();
 
     public CardGameState(Rules rules, int w, int h) {
         this.rules=rules;
@@ -136,6 +139,19 @@ public class CardGameState {
     }
 
 
+    public void computePossibleChanges() {
+        for(int i=0;i<map.getWidth();i++) {
+            for (int j = 0; j < map.getHeight(); j++) {
+                Pos pos = new Pos(i,j);
+                map.getCell(pos).clearPossibleChanges();
+                for(Rule r:rules.getRulesWithpossibleChange(this,pos)){
+                    map.getCell(pos).addPossibleChanges(r.getElement().getType());
+                }
+            }
+        }
+    }
+
+
 
     public Element getElementAt(Pos pos) {
         return map.getElement(pos);
@@ -186,7 +202,6 @@ public class CardGameState {
     private void put(Element element, Pos pos){
         tempMap.put(element,pos);
     }
-
 
 
 

@@ -6,16 +6,21 @@ import com.ccg.ccgbe.cardgame.card.Card;
 import com.ccg.ccgbe.cardgame.draw.DoNothingDraw;
 import com.ccg.ccgbe.cardgame.draw.Draw;
 import com.ccg.ccgbe.cardgame.draw.PlaceCardDraw;
+import com.ccg.ccgbe.cardgame.events.DrawEvent;
+import com.ccg.ccgbe.cardgame.events.EventHistroy;
 import com.ccg.ccgbe.cardgame.player.Player;
 import com.ccg.ccgbe.cardgame.rules.Rules;
 import com.ccg.ccgbe.cardgame.state.CardGameState;
 import com.ccg.ccgbe.cardgame.state.map.Map;
 import com.ccg.ccgbe.dto.GameDataDTO;
+import lombok.extern.slf4j.Slf4j;
+
 
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.UUID;
 
+@Slf4j
 public class CardGame {
 
     /**
@@ -36,10 +41,19 @@ public class CardGame {
     private final int h =Config.DEFAULT_HEIGHT;
 
 
+
+
     public CardGame(ArrayList<Player> players, Rules rules) {
         gameId = UUID.randomUUID();
         this.players = players;
         this.state = new CardGameState(rules, w,h);
+        init();
+    }
+
+    public CardGame(ArrayList<Player> players, Rules rules, Map map) {
+        gameId = UUID.randomUUID();
+        this.players =  players;
+        this.state = new CardGameState(rules,map);
         init();
     }
 
@@ -64,16 +78,13 @@ public class CardGame {
     }
 
     private void init(){
-
-
         turn = players.get(new Random().nextInt(players.size()));
         for(Player p:players){
-            newCard(p);
-            newCard(p);
-            newCard(p);
-            newCard(p);
-            newCard(p);
+            for (int i = 0; i < Config.HAND_START_SIZE; i++) {
+                newCard(p);
+            }
         }
+        state.computePossibleChanges();
     }
 
     public void doDraw(Draw draw){
@@ -85,6 +96,7 @@ public class CardGame {
 
         PlaceCardDraw d = (PlaceCardDraw)draw;
         if(draw.getPlayer().equals(turn) && turn.getHand().includes(d.getCard())){
+            log.info(draw.toString());
             Player player = draw.getPlayer();
             Card card = d.getCard();
             player.getHand().removeCard(card);
@@ -110,14 +122,15 @@ public class CardGame {
     }
 
     private void nextPlayer(){
+
         if(players.indexOf(turn)<players.size()-1){
             turn = players.get(players.indexOf(turn)+1);
         }else {
             state.performEndRoundFunctions();
-          //  System.out.println("------------- performed end round" );
             turn =players.get(0);
 
         }
+        state.computePossibleChanges();
         turn.drawNewCard();
     }
 

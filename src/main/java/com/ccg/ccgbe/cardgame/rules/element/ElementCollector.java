@@ -12,8 +12,14 @@ public class ElementCollector {
 
     private ArrayList<EType> types = new ArrayList<>();
 
-    public ElementCollector() {
+    private Random r;
 
+    public ElementCollector() {
+        r=new Random();
+    }
+
+    public ElementCollector(long seed) {
+        this.r=new Random(seed);
     }
 
     public ArrayList<Element> getAllElements() {
@@ -99,7 +105,6 @@ public class ElementCollector {
     }
 
     public Element getRandom(){
-        Random r = new Random();
         return elements.get(r.nextInt(elements.size()));
     }
 
@@ -116,7 +121,6 @@ public class ElementCollector {
     }
 
     public Element getRandomBasic(){
-        Random r = new Random();
         ArrayList<Element> basicElements = getBasicElements();
         return basicElements.get(r.nextInt(basicElements.size()));
     }

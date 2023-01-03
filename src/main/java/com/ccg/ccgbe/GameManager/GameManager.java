@@ -14,9 +14,7 @@ import com.ccg.ccgbe.cardgame.rules.Rules;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Component
 @Slf4j
@@ -32,18 +30,21 @@ public class GameManager {
     public CardGame createGame_Test() {
         LandScapeBuilder lb = new LandScapeBuilder();
         Rules rules = lb.createRules();
+        //log.info(rules.toString());
 
         SimpleCardBuilder b = new SimpleCardBuilder(rules.getE());
 
 
-        Deck d1 = new Deck(b.getRandomWxHCards(800,2,2));
-        Deck d2 = new Deck(b.getRandomWxHCards(800,2,2));
+        Deck d1 = new Deck(b.getRandomWxHCards(800,1,1));
+        Deck d2 = new Deck(b.getRandomWxHCards(800,1,1));
+        Deck d3 = new Deck(b.getRandomWxHCards(800,1,1));
 
         Player p1 = new Player("hans",d1);
         Player p2 = new Player("peter",d2);
+        Player p3 = new Player("ursel",d3);
 
 
-        CardGame game = new CardGame(p1,p2,rules,lb.generateMap());
+        CardGame game = new CardGame(new ArrayList<>(Arrays.asList(p1,p2,p3)),rules,lb.generateMap());
         //log.info(game.toString());
 
         this.games.put(game.getGameId(), game);

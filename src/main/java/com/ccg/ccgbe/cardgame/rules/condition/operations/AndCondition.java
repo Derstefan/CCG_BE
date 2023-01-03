@@ -34,7 +34,8 @@ public class AndCondition extends Condition {
         cond2.setPos(pos);
     }
 
+    @Override
     public String toString(){
-        return cond1.toString() + " AND " + cond2.toString();
+        return "(" +cond1.toString() + " AND " + cond2.toString()+")";
     }
 }

@@ -1,10 +1,7 @@
 package com.ccg.ccgbe.cardgame.builder.landscapeBuilder;
 
 import com.ccg.ccgbe.cardgame.builder.Config;
-import com.ccg.ccgbe.cardgame.builder.RulesBuilder;
-import com.ccg.ccgbe.cardgame.builder.core.ConditionBuilder;
-import com.ccg.ccgbe.cardgame.builder.core.MapBuilder;
-import com.ccg.ccgbe.cardgame.builder.core.RuleBuilder;
+import com.ccg.ccgbe.cardgame.builder.core.*;
 import com.ccg.ccgbe.cardgame.rules.Rules;
 import com.ccg.ccgbe.cardgame.rules.condition.Condition;
 import com.ccg.ccgbe.cardgame.rules.condition.stateCondition.StateCondition;
@@ -19,25 +16,27 @@ import java.util.ArrayList;
 @Slf4j
 public class LandScapeBuilder extends RulesBuilder {
 
-    private ElementCollector E;
-    private ArrayList<Rule> manuellEuleSet = new ArrayList<>();
-    private ArrayList<Rule> automaticEuleSet = new ArrayList<>();
+    private ArrayList<Rule> manRules = new ArrayList<>();
+    private ArrayList<Rule> autRules = new ArrayList<>();
     private ArrayList<Condition> winnerConds = new ArrayList<>();
 
 
     public LandScapeBuilder(){
+        super();
         init();
     }
 
 
     public Rules createRules(){
-        return new Rules(E,manuellEuleSet,automaticEuleSet,winnerConds);
+        return new Rules(getE(), manRules, autRules,winnerConds);
     }
 
     private void init(){
         initElements();
         initManuellRuleSet();
         initAutomaticRuleSet();
+
+
         initWinnerConditions();
         areaRules();
 
@@ -55,105 +54,134 @@ public class LandScapeBuilder extends RulesBuilder {
         E.add(new EType("s","#f3ffef","snow",true));
         E.add(new EType("L","#0000e6","lake",true));
         E.add(new EType("M","#778577","mountain",false));
+        E.add(new EType("H","#AAA5B7","hills",false));
+        E.add(new EType("R","#4040B6","river",false));
+        E.add(new EType("F","#5aBd27","forest",false));
+        E.add(new EType("J","#3a9d37","jungle",false));
+        E.add(new EType("O","#8aad27","oase",false));
 
 
         E.finish();
-        this.E = E;
+        setE(E);
     }
 
     private void initManuellRuleSet(){
 
-        RuleBuilder rb = new RuleBuilder(E);
-        ConditionBuilder cb = new ConditionBuilder(E);
+        ArrayList<Rule> manRules = new ArrayList<>();
 
-        rb.border("G",3,3,"s");
-        rb.border("S",3,3,"G");
-        rb.border("D",3,3,"S");
-        rb.border("L",4,4,"D");
-        rb.border("L",4,4,"S");
-        rb.border("L",4,4,"G");
-        rb.border("L",4,4,"s");
+        manRules.addAll(rule("G","L").when(min(4,"G")).create());
+        manRules.addAll(rule("G","s").when(min(3,"D").OR(min(4,"S")).OR(min(3,"G"))).create());
+        manRules.addAll(rule("G","S").when(min(4,"s").OR(min(3,"G"))).create());
+
+        manRules.addAll(rule("S","G").when(min(3,"D").OR(min(3,"S"))).create());
+        manRules.addAll(rule("S","D").when(min(3,"s").OR(min(3,"S"))).create());
+        manRules.addAll(rule("S","L").when(min(4,"S")).create());
+
+        manRules.addAll(rule("D","S").when(min(3,"D")).create());
+        manRules.addAll(rule("D","L").when(min(4,"D")).create());
+
+        manRules.addAll(rule("s","G").when(min(3,"s")).create());
+        manRules.addAll(rule("s","L").when(min(4,"D")).create());
+
+        manRules.addAll(rule("L","D,S,G,s").when(min(4,"L")).create());
+
+        manRules.addAll(rule("O","D").when(min2(24,"D")).create());
 
 
-        rb.expand("G","s",3,"D");
-        rb.expand("G","s",4,"S");
-        rb.expand("S","G",3,"D");
-        rb.expand("G","S",4,"s");
-        rb.expand("S","D",3,"s");
 
 
-        manuellEuleSet = rb.createRuleSet();
+
+        this.manRules = manRules;
     }
 
     private void initAutomaticRuleSet(){
 
-        RuleBuilder rb = new RuleBuilder(E);
+
+        ArrayList<Rule> autRules = new ArrayList<>();
 
 
-/*        rb.expand("G","s",3,"D");
-        rb.expand("G","s",5,"S");
+        autRules.addAll(rule("S","D").when(min(3,"s").OR(min(5,"G"))).create());
 
-        rb.expand("S","D",3,"s");
-        rb.expand("S","D",5,"G");*/
-
-        rb.border("G",5,5,"s");
-        rb.border("S",5,5,"G");
-        rb.border("S",5,5,"s");
-        rb.border("D",5,5,"S");
-        rb.border("D",5,5,"G");
-        rb.border("D",5,5,"s");
-        rb.border("L",5,5,"D");
-        rb.border("L",5,5,"S");
-        rb.border("L",5,5,"G");
-        rb.border("L",5,5,"s");
+        autRules.addAll(border("G",5,5,"s"));
+        autRules.addAll(border("S",5,5,"G"));
+        autRules.addAll(border("S",5,5,"s"));
+        autRules.addAll(border("D",5,5,"S"));
+        autRules.addAll(border("D",5,5,"G"));
+        autRules.addAll(border("D",5,5,"s"));
+        autRules.addAll(border("L",5,5,"D"));
+        autRules.addAll(border("L",5,5,"S"));
+        autRules.addAll(border("L",5,5,"G"));
+        autRules.addAll(border("L",5,5,"s"));
 
 
-        rb.expand("G","s",3,"D","S");
-        rb.expand("S","D",3,"G","s");
-        //rb.expand("G","D",2,"L");
+        autRules.addAll(rule("G","s").when(min(3,"D,S")).create());
+        autRules.addAll(rule("S","D").when(min(3,"G,s").OR(min(2,"L"))).create());
+        autRules.addAll(rule("R","H,S,G,D,F,J,s").when(exactNeighbours(1,"R").AND(max(1,"R")).AND(max2(3,"R")).AND(wsk(0.3))).create());
+        autRules.addAll(rule("R","H,S,G,D,F,J,s").when(exactNeighbours(1,"R").AND(exactNeighbours(1,"L"))).create());
 
-        automaticEuleSet = rb.createRuleSet();
+        this.autRules = autRules;
     }
 
 
     private ArrayList<Rule> areaRules(){
 
-        RuleBuilder rb = new RuleBuilder(E);
+        ArrayList<Rule> ruleSet = new ArrayList<>();
 
-        rb.border("G",4,4,"s");
-        rb.border("S",4,4,"G");
-        rb.border("S",4,4,"s");
-        rb.border("D",4,4,"S");
-        rb.border("D",4,4,"G");
-        rb.border("D",4,4,"s");
-        rb.border("L",4,4,"D");
-        rb.border("L",4,4,"S");
-        rb.border("L",4,4,"G");
-        rb.border("L",4,4,"s");
+        ruleSet.addAll(border("G",4,4,"s"));
+        ruleSet.addAll(border("S",4,4,"G"));
+        ruleSet.addAll(border("S",4,4,"s"));
+        ruleSet.addAll(border("D",4,4,"S"));
+        ruleSet.addAll(border("D",4,4,"G"));
+        ruleSet.addAll(border("D",4,4,"s"));
+        ruleSet.addAll(border("L",4,4,"D"));
+        ruleSet.addAll(border("L",4,4,"S"));
+        ruleSet.addAll(border("L",4,4,"G"));
+        ruleSet.addAll(border("L",4,4,"s"));
 
-
-/*        rb.expand("G","s",3,"D","S");
-        rb.expand("S","D",3,"G","s");*/
-        //rb.expand("G","D",2,"L");
-
-        return rb.createRuleSet();
+        return ruleSet;
     }
 
-    private ArrayList<Rule> mountainRules(){
+    private ArrayList<Rule> mountainRuleSet(){
 
-        RuleBuilder rb = new RuleBuilder(E);
-        ConditionBuilder cb = new ConditionBuilder(E);
+        ArrayList<Rule> ruleSet = new ArrayList<>();
 
-        rb.rule("M","s",cb.around(3,"D").AND(cb.around(3,"s")));
-        rb.rule("M","D",cb.around(4,"D").AND(cb.around(3,"G")));
-        rb.rule("M","D",cb.around(4,"L").AND(cb.around(2,"D")));
-        rb.rule("M","S",cb.around(3,"s").AND(cb.around(3,"S")));
+        ruleSet.addAll(rule("M","s").when(min(3,"D").AND(min(3,"s"))).create());
+        ruleSet.addAll(rule("M","D").when(min(4,"D").AND(min(3,"G"))).create());
+        ruleSet.addAll(rule("M","D").when(min(4,"L").AND(min(3,"D"))).create());
+        ruleSet.addAll(rule("M","S").when(min(3,"s").AND(min(3,"S"))).create());
+        ruleSet.addAll(rule("M","H").when(min(4,"H").AND(min(2,"M"))).create());
+        ruleSet.addAll(rule("H","s,D").when(min(2,"M")).create());
+        ruleSet.addAll(rule("H","G,S,D,s").when(min(3,"H").AND(min(1,"M"))).create());
 
-/*        rb.expand("G","s",3,"D","S");
-        rb.expand("S","D",3,"G","s");*/
-        //rb.expand("G","D",2,"L");
 
-        return rb.createRuleSet();
+
+
+        manRules.addAll(ruleSet);
+        return ruleSet;
+    }
+
+    private ArrayList<Rule> floraRules(){
+
+        ArrayList<Rule> ruleSet = new ArrayList<>();
+
+
+        ruleSet.addAll(rule("J","S").when(min2(13,"S")).create());
+        ruleSet.addAll(rule("F","G").when(min2(13,"G")).create());
+
+        //ruleSet.addAll(rule("F","G").when(min(1,"F").AND(min(1,"L"))).create());
+
+
+        manRules.addAll(ruleSet);
+        return ruleSet;
+    }
+
+    private ArrayList<Rule> riverRules(){
+
+        ArrayList<Rule> ruleSet = new ArrayList<>();
+        ruleSet.addAll(rule("R","H").when(exactNeighbours(3,"M")).create());
+
+        manRules.addAll(ruleSet);
+        return ruleSet;
     }
 
 
@@ -177,10 +205,12 @@ public class LandScapeBuilder extends RulesBuilder {
         return map;
     }
     public Map generateMap(int w, int h) {
-        MapBuilder mb = new MapBuilder(E);
+        MapBuilder mb = new MapBuilder(getE());
         mb.generate(w,h);
-        mb.iterateRules(areaRules(),4);
-        mb.iterateRules(mountainRules(),2);
+        mb.iterateRules(areaRules(),8);
+        mb.iterateRules(mountainRuleSet(),3);
+        mb.iterateRules(floraRules(),3);
+        mb.iterateRules(riverRules(),1);
 
         return mb.create();
     }

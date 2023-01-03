@@ -77,8 +77,8 @@ public class SimpleCardBuilder {
     }
 
     public static int rand1(int l){
-        if(l==1)return 1;
-        return new Random().nextInt(l-1)+1;
+        if(l==0)return 1;
+        return new Random().nextInt(l)+1;
     }
 
 }

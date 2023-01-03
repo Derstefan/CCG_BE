@@ -22,4 +22,8 @@ public class ElementCondition extends StatePosCondition {
     public static ElementCondition getInstance(Element e){
         return new ElementCondition(e);
     }
+
+    public String toString(){
+        return element+"-Cond";
+    }
 }

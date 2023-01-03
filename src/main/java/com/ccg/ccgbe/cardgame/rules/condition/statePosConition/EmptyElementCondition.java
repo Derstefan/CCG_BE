@@ -8,4 +8,9 @@ public class EmptyElementCondition extends StatePosCondition {
     public boolean check(CardGameState state) {
         return state.getElementAt(getPos())==null;
     }
+
+    @Override
+    public String toString() {
+        return null;
+    }
 }

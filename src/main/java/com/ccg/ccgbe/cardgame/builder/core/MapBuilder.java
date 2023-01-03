@@ -23,6 +23,8 @@ public class MapBuilder {
 
     private Map map;
 
+    private long seed;
+
     public MapBuilder(ElementCollector e) {
         E = e;
     }
@@ -46,7 +48,7 @@ public class MapBuilder {
         Cell[][] mapData = new Cell[w][h];
         for (int i = 0; i < mapData.length; i++) {
             for (int j = 0; j < mapData[0].length; j++) {
-                mapData[i][j] = new Cell(E.getRandomBasic(),new Pos(i,j));//TODO: hier optimieren!!!
+                mapData[i][j] = new Cell(E.getRandomBasic(),new Pos(i,j));
 
             }
         }

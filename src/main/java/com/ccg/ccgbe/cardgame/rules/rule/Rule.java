@@ -11,6 +11,8 @@ public class Rule {
     private Element element;
     private Condition condition;
 
+    private String description = "";
+
     public Rule(Element element, Condition condition) {
         this.element = element;
         this.condition = condition;
@@ -23,6 +25,19 @@ public class Rule {
     public boolean check(CardGameState state, Pos pos) {
         condition.setPos(pos);
         return condition.check(state);
+    }
+
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Condition getCondition() {
+        return condition;
     }
 
     public String toString(){
