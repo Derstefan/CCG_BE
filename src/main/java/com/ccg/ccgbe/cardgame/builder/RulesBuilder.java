@@ -1,6 +1,5 @@
-package com.ccg.ccgbe.cardgame.builder.core;
+package com.ccg.ccgbe.cardgame.builder;
 
-import com.ccg.ccgbe.cardgame.builder.Config;
 import com.ccg.ccgbe.cardgame.rules.condition.Condition;
 import com.ccg.ccgbe.cardgame.rules.condition.operations.AlwaysTrueCondition;
 import com.ccg.ccgbe.cardgame.rules.condition.operations.PropabilityCondition;
@@ -43,7 +42,6 @@ public class RulesBuilder {
         for (int i = 0; i < eStr.length; i++) {
             elements[i]=E.get(eStr[i]);
             if(elements[i]==null)throw new IllegalArgumentException(eStr[i] +" is no Element");
-            conditions[i]=new ElementCondition(elements[i]);
         }
         return this;
     }
@@ -60,7 +58,7 @@ public class RulesBuilder {
     public RulesBuilder when(Condition condition){
 
         for (int i = 0; i < conditions.length; i++) {
-            conditions[i] = conditions[i].AND(condition);
+            conditions[i] = condition;
         }
 
         return this;
@@ -108,7 +106,8 @@ public class RulesBuilder {
     }*/
 
     public Condition at(Pos vec, String A){
-        return new ElementAtCondition(E.get(A),vec);
+
+        return new ElementAtCondition(vec,E.get(A));
     }
 
     public Condition wsk(double probability){
@@ -128,12 +127,7 @@ public class RulesBuilder {
     }
 
     public Condition around(EComparator comp,int radius,int n,String Es){
-        String[] elementsStrings = Es.split(",\\s*");
-        Element[] elements = new Element[elementsStrings.length];
-
-        for (int i = 0; i < elementsStrings.length; i++) {
-            elements[i]=E.get(elementsStrings[i]);
-        }
+        Element[] elements = Helper.getElementsFromString(E,Es);
         return new AroundCondition(comp,radius,n,elements);
     }
 
@@ -150,13 +144,21 @@ public class RulesBuilder {
     public ArrayList<Rule> create(){
         ArrayList<Rule> ruleSet = new ArrayList<>();
         for (int i = 0; i < elements.length; i++) {
-            Rule r = new Rule(A,conditions[i]);
+            Rule r = new Rule(A,elements[i],conditions[i]);
             ruleSet.add(r);
 //            log.info(conditions[i].toString());
         }
         return ruleSet;
     }
 
+
+    public Element getElement(String A){
+        return E.get(A);
+    }
+
+    public Element[] getElements(String Es){
+        return Helper.getElementsFromString(E,Es);
+    }
 
     public void setE(ElementCollector e) {
         E = e;

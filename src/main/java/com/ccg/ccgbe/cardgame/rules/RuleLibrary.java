@@ -12,28 +12,28 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Optional;
 
-public class Rules {
+public class RuleLibrary {
 
 
     private ElementCollector E;
     private ArrayList<Rule> ruleSet = new ArrayList<>();
 
-    private ArrayList<Rule> automaticEuleSet = new ArrayList<>();
+    private ArrayList<Rule> automaticRuleSet = new ArrayList<>();
 
     private ArrayList<Condition> winnerCondition;
 
-    public Rules(ElementCollector E, ArrayList<Rule> manuellRuleSet, ArrayList<Condition> winnerCondition) {
+    public RuleLibrary(ElementCollector E, ArrayList<Rule> manuellRuleSet, ArrayList<Condition> winnerCondition) {
         this.E = E;
         this.ruleSet = ruleSet;
         this.winnerCondition = winnerCondition;
         checkConstistence();
     }
 
-    public Rules(ElementCollector E, ArrayList<Rule> manuellEuleSet,ArrayList<Rule> automaticEuleSet, ArrayList<Condition> winnerCondition) {
+    public RuleLibrary(ElementCollector E, ArrayList<Rule> manuellEuleSet, ArrayList<Rule> automaticEuleSet, ArrayList<Condition> winnerCondition) {
         this.E = E;
         this.ruleSet = manuellEuleSet;
         this.ruleSet.addAll(automaticEuleSet);
-        this.automaticEuleSet = automaticEuleSet;
+        this.automaticRuleSet = automaticEuleSet;
         this.winnerCondition = winnerCondition;
         checkConstistence();
     }
@@ -66,8 +66,12 @@ public class Rules {
         return possibleRules;
     }
 
-    public ArrayList<Rule> getAutomaticEuleSet() {
-        return automaticEuleSet;
+    public ArrayList<Rule> getRuleSet() {
+        return ruleSet;
+    }
+
+    public ArrayList<Rule> getAutomaticRuleSet() {
+        return automaticRuleSet;
     }
 
 /*    public void put(Element element, CardGameState state, Pos pos){

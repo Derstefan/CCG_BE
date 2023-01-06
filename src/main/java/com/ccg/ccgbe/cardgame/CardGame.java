@@ -6,10 +6,9 @@ import com.ccg.ccgbe.cardgame.card.Card;
 import com.ccg.ccgbe.cardgame.draw.DoNothingDraw;
 import com.ccg.ccgbe.cardgame.draw.Draw;
 import com.ccg.ccgbe.cardgame.draw.PlaceCardDraw;
-import com.ccg.ccgbe.cardgame.events.DrawEvent;
-import com.ccg.ccgbe.cardgame.events.EventHistroy;
 import com.ccg.ccgbe.cardgame.player.Player;
-import com.ccg.ccgbe.cardgame.rules.Rules;
+import com.ccg.ccgbe.cardgame.rules.RuleLibrary;
+import com.ccg.ccgbe.cardgame.rules.rule.Rule;
 import com.ccg.ccgbe.cardgame.state.CardGameState;
 import com.ccg.ccgbe.cardgame.state.map.Map;
 import com.ccg.ccgbe.dto.GameDataDTO;
@@ -40,40 +39,46 @@ public class CardGame {
 
     private final int h =Config.DEFAULT_HEIGHT;
 
+    private RuleLibrary ruleLibrary;
 
 
 
-    public CardGame(ArrayList<Player> players, Rules rules) {
+
+    public CardGame(ArrayList<Player> players, RuleLibrary ruleLibrary) {
         gameId = UUID.randomUUID();
         this.players = players;
-        this.state = new CardGameState(rules, w,h);
+        this.ruleLibrary=ruleLibrary;
+        this.state = new CardGameState(ruleLibrary, w,h);
         init();
     }
 
-    public CardGame(ArrayList<Player> players, Rules rules, Map map) {
+    public CardGame(ArrayList<Player> players, RuleLibrary ruleLibrary, Map map) {
         gameId = UUID.randomUUID();
         this.players =  players;
-        this.state = new CardGameState(rules,map);
+        this.ruleLibrary=ruleLibrary;
+        this.state = new CardGameState(ruleLibrary,map);
         init();
     }
 
-    public CardGame(Player player1, Player player2, Rules rules) {
+    public CardGame(Player player1, Player player2, RuleLibrary ruleLibrary) {
         gameId = UUID.randomUUID();
         ArrayList<Player> players = new ArrayList<>();
         players.add(player1);
         players.add(player2);
         this.players = players;
-        this.state = new CardGameState(rules,Config.DEFAULT_WIDTH,Config.DEFAULT_HEIGHT);
+        this.ruleLibrary=ruleLibrary;
+        this.state = new CardGameState(ruleLibrary,Config.DEFAULT_WIDTH,Config.DEFAULT_HEIGHT);
         init();
     }
 
-    public CardGame(Player player1, Player player2, Rules rules, Map map) {
+    public CardGame(Player player1, Player player2, RuleLibrary ruleLibrary, Map map) {
         gameId = UUID.randomUUID();
         ArrayList<Player> players = new ArrayList<>();
         players.add(player1);
         players.add(player2);
         this.players = players;
-        this.state = new CardGameState(rules,map);
+        this.ruleLibrary=ruleLibrary;
+        this.state = new CardGameState(ruleLibrary,map);
         init();
     }
 
@@ -96,7 +101,7 @@ public class CardGame {
 
         PlaceCardDraw d = (PlaceCardDraw)draw;
         if(draw.getPlayer().equals(turn) && turn.getHand().includes(d.getCard())){
-            log.info(draw.toString());
+            //log.info(draw.toString());
             Player player = draw.getPlayer();
             Card card = d.getCard();
             player.getHand().removeCard(card);
@@ -182,6 +187,11 @@ public class CardGame {
 
     public int getHeight(){
         return h;
+    }
+
+
+    public RuleLibrary getRuleLibrary() {
+        return ruleLibrary;
     }
 
     public GameDataDTO getDTO(){

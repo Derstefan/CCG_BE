@@ -11,7 +11,7 @@ import java.util.function.Function;
 public class Element {
     private EType type;
 
-  //TODO: tags for functionsss: swortds, tower, forest,town,smith
+  //TODO: tags for functionsss: tower, forest,town,smith
 //    private ArrayList<Tag> tags;
 
     private FunctionManager func = new FunctionManager();

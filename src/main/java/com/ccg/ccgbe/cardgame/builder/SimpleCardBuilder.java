@@ -1,4 +1,4 @@
-package com.ccg.ccgbe.cardgame.builder.core;
+package com.ccg.ccgbe.cardgame.builder;
 
 import com.ccg.ccgbe.cardgame.card.Card;
 import com.ccg.ccgbe.cardgame.rules.element.Element;

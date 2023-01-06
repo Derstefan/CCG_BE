@@ -1,8 +1,10 @@
 package com.ccg.ccgbe.cardgame.builder.landscapeBuilder;
 
 import com.ccg.ccgbe.cardgame.builder.Config;
-import com.ccg.ccgbe.cardgame.builder.core.*;
-import com.ccg.ccgbe.cardgame.rules.Rules;
+import com.ccg.ccgbe.cardgame.builder.MapBuilder;
+import com.ccg.ccgbe.cardgame.builder.RulesBuilder;
+import com.ccg.ccgbe.cardgame.builder.landscapeBuilder.functions.LandscapeFunctions;
+import com.ccg.ccgbe.cardgame.rules.RuleLibrary;
 import com.ccg.ccgbe.cardgame.rules.condition.Condition;
 import com.ccg.ccgbe.cardgame.rules.condition.stateCondition.StateCondition;
 import com.ccg.ccgbe.cardgame.rules.element.EType;
@@ -27,12 +29,13 @@ public class LandScapeBuilder extends RulesBuilder {
     }
 
 
-    public Rules createRules(){
-        return new Rules(getE(), manRules, autRules,winnerConds);
+    public RuleLibrary createRules(){
+        return new RuleLibrary(getE(), manRules, autRules,winnerConds);
     }
 
     private void init(){
         initElements();
+        addElementFunctions();
         initManuellRuleSet();
         initAutomaticRuleSet();
 
@@ -59,11 +62,31 @@ public class LandScapeBuilder extends RulesBuilder {
         E.add(new EType("F","#5aBd27","forest",false));
         E.add(new EType("J","#3a9d37","jungle",false));
         E.add(new EType("O","#8aad27","oase",false));
+        E.add(new EType("@","#Ba2d27","dragonhort",false));
 
 
         E.finish();
+
+
+
+
+
         setE(E);
+
+
+
+
+
     }
+
+    private void addElementFunctions(){
+        LandscapeFunctions f = new LandscapeFunctions(getE());
+
+        getElement("R").getFunc().add(f.RIVER_FLOW_FUNCTION(getElement("R"),getElements("G,S,H,D,s"),getElements("L")));
+
+    }
+
+
 
     private void initManuellRuleSet(){
 
@@ -86,6 +109,7 @@ public class LandScapeBuilder extends RulesBuilder {
         manRules.addAll(rule("L","D,S,G,s").when(min(4,"L")).create());
 
         manRules.addAll(rule("O","D").when(min2(24,"D")).create());
+        manRules.addAll(rule("@","M").when(max(0,"M")).create());
 
 
 
@@ -116,8 +140,6 @@ public class LandScapeBuilder extends RulesBuilder {
 
         autRules.addAll(rule("G","s").when(min(3,"D,S")).create());
         autRules.addAll(rule("S","D").when(min(3,"G,s").OR(min(2,"L"))).create());
-        autRules.addAll(rule("R","H,S,G,D,F,J,s").when(exactNeighbours(1,"R").AND(max(1,"R")).AND(max2(3,"R")).AND(wsk(0.3))).create());
-        autRules.addAll(rule("R","H,S,G,D,F,J,s").when(exactNeighbours(1,"R").AND(exactNeighbours(1,"L"))).create());
 
         this.autRules = autRules;
     }
@@ -210,7 +232,7 @@ public class LandScapeBuilder extends RulesBuilder {
         mb.iterateRules(areaRules(),8);
         mb.iterateRules(mountainRuleSet(),3);
         mb.iterateRules(floraRules(),3);
-        mb.iterateRules(riverRules(),1);
+        mb.iterateRules(riverRules(),10);
 
         return mb.create();
     }

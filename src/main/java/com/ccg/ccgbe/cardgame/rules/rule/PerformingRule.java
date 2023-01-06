@@ -9,8 +9,8 @@ import com.ccg.ccgbe.cardgame.state.map.Pos;
 public abstract class PerformingRule extends Rule{
 
 
-    public PerformingRule(Element element, Condition condition) {
-        super(element, condition);
+    public PerformingRule(Element element,Element beforeElement, Condition condition) {
+        super(element,beforeElement, condition);
     }
 
     public abstract void perform(CardGameState state, Pos pos);

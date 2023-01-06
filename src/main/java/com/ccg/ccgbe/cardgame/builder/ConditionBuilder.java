@@ -1,4 +1,4 @@
-package com.ccg.ccgbe.cardgame.builder.core;
+package com.ccg.ccgbe.cardgame.builder;
 
 
 import com.ccg.ccgbe.cardgame.rules.condition.Condition;
@@ -12,11 +12,6 @@ public class ConditionBuilder {
 
     public ConditionBuilder(ElementCollector e) {
         E = e;
-    }
-
-
-    public Condition over(String e){
-        return new ElementCondition(E.get(e));
     }
 
     public Condition around(int min, String ... eStr){
@@ -72,9 +67,4 @@ public class ConditionBuilder {
         return new AroundCondition(comp,radius,n,elements);
     }
 
-
-
-    public EmptyElementCondition canPLaceAnywhere(){
-        return new EmptyElementCondition();
-    }
 }

@@ -1,19 +1,13 @@
-package com.ccg.ccgbe.cardgame.builder.core;
+package com.ccg.ccgbe.cardgame.builder;
 
 
 import com.ccg.ccgbe.cardgame.rules.condition.Condition;
-import com.ccg.ccgbe.cardgame.rules.condition.statePosConition.AroundCondition;
-import com.ccg.ccgbe.cardgame.rules.condition.statePosConition.EComparator;
-import com.ccg.ccgbe.cardgame.rules.condition.statePosConition.ElementCondition;
-import com.ccg.ccgbe.cardgame.rules.condition.statePosConition.EmptyElementCondition;
 import com.ccg.ccgbe.cardgame.rules.element.Element;
 import com.ccg.ccgbe.cardgame.rules.element.ElementCollector;
 import com.ccg.ccgbe.cardgame.rules.rule.Rule;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Objects;
 
 public class RuleBuilder {
 
@@ -97,7 +91,7 @@ public class RuleBuilder {
         }
         Element e1 = E.get(A);
         Element e2 = E.get(B);
-        Rule rule =new Rule(e1,new ElementCondition(e2).AND(when));
+        Rule rule =new Rule(e1,e2,when);
         ruleSet.add(rule);
         return rule;
     }
@@ -110,6 +104,8 @@ public class RuleBuilder {
             rule(A,s,when);
         }
     }
+
+
 
 
 

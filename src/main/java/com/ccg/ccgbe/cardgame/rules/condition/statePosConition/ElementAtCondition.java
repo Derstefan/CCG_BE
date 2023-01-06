@@ -5,14 +5,18 @@ import com.ccg.ccgbe.cardgame.rules.element.Element;
 import com.ccg.ccgbe.cardgame.state.CardGameState;
 import com.ccg.ccgbe.cardgame.state.map.Pos;
 
-public class ElementAtCondition extends Condition {
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-    private Element element;
+public class ElementAtCondition extends StatePosCondition {
+
+    private Element[] elements;
 
     private Pos vec;
 
-    public ElementAtCondition(Element element, Pos vec) {
-        this.element = element;
+    public ElementAtCondition( Pos vec,Element ... elements) {
+        this.elements = elements;
         this.vec = vec;
     }
 
@@ -20,7 +24,8 @@ public class ElementAtCondition extends Condition {
     public boolean check(CardGameState state) {
         Pos pos = getPos();
         Pos indexPos = pos.plus(vec);
-        return element.equals(state.getElementAt(indexPos));
+        if(!state.isOnMap(indexPos))return false;
+        return Arrays.asList(elements).contains(state.getElementAt(indexPos));
     }
 
     @Override
