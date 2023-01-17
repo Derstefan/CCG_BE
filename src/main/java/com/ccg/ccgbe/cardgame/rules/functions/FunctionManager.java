@@ -5,59 +5,58 @@ import com.ccg.ccgbe.cardgame.state.CardGameState;
 import com.ccg.ccgbe.cardgame.state.map.Pos;
 
 import java.util.ArrayList;
-import java.util.function.Function;
 
 public class FunctionManager {
 
 
     //first Placement then apply (Element-param is the old Element on Pos)
-    private ArrayList<OnPlacementFunction> functionsOnPlacement = new ArrayList<>();
+    private ArrayList<OnEventFunction> functionsOnPlacement = new ArrayList<>();
     //first Replace then apply (Element-param is the old Element on Pos)
-    private ArrayList<OnRemovingFunction> functionsOnRemove = new ArrayList<>();
+    private ArrayList<OnEventFunction> functionsOnRemove = new ArrayList<>();
 
-    private ArrayList<PerformEarchRoundFunction> functionsEachRound = new ArrayList<>();
+    private ArrayList<OnEndroundFunction> functionsEachRound = new ArrayList<>();
 
 
-    public ArrayList<OnPlacementFunction> getFunctionsOnPlacement() {
+    public ArrayList<OnEventFunction> getFunctionsOnPlacement() {
         return functionsOnPlacement;
     }
 
-    public ArrayList<OnRemovingFunction> getFunctionsOnRemove() {
+    public ArrayList<OnEventFunction> getFunctionsOnRemove() {
         return functionsOnRemove;
     }
 
-    public ArrayList<PerformEarchRoundFunction> getFunctionsEachRound() {
+    public ArrayList<OnEndroundFunction> getFunctionsEachRound() {
         return functionsEachRound;
     }
 
 
     public void performPlacement(CardGameState state, Element beforeElement, Pos pos) {
-        for(OnPlacementFunction f: functionsOnPlacement){
+        for(OnEventFunction f: functionsOnPlacement){
             f.apply(state,beforeElement,pos);
         }
     }
 
     public void performRemove(CardGameState state, Element beforeElement, Pos pos) {
-        for(OnRemovingFunction f: functionsOnRemove){
+        for(OnEventFunction f: functionsOnRemove){
             f.apply(state,beforeElement,pos);
         }
     }
 
     public void performEndRound(CardGameState state, Pos pos) {
-        for(PerformEarchRoundFunction f: functionsEachRound){
+        for(OnEndroundFunction f: functionsEachRound){
             f.apply(state,pos);
         }
     }
 
-    public void add(OnPlacementFunction f){
+    public void addOnPlacementFunction(OnEventFunction f){
         functionsOnPlacement.add(f);
     }
 
-    public void add(OnRemovingFunction f){
+    public void addOnRemoveFunction(OnEventFunction f){
         functionsOnRemove.add(f);
     }
 
-    public void add(PerformEarchRoundFunction f){
+    public void add(OnEndroundFunction f){
         functionsEachRound.add(f);
     }
 

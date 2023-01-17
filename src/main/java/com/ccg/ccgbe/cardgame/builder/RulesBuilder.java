@@ -4,6 +4,7 @@ import com.ccg.ccgbe.cardgame.rules.condition.Condition;
 import com.ccg.ccgbe.cardgame.rules.condition.operations.AlwaysTrueCondition;
 import com.ccg.ccgbe.cardgame.rules.condition.operations.PropabilityCondition;
 import com.ccg.ccgbe.cardgame.rules.condition.statePosConition.*;
+import com.ccg.ccgbe.cardgame.rules.condition.statePosConition.fight.MoreThanCondition;
 import com.ccg.ccgbe.cardgame.rules.element.Element;
 import com.ccg.ccgbe.cardgame.rules.element.ElementCollector;
 import com.ccg.ccgbe.cardgame.rules.rule.Rule;
@@ -69,6 +70,8 @@ public class RulesBuilder {
         return around(EComparator.min,1,n,Es);
     }
 
+
+
     public Condition max(int n,String Es){
         return around(EComparator.max,1,n,Es);
     }
@@ -91,6 +94,14 @@ public class RulesBuilder {
 
     public Condition min2(int n,String Es){
         return around(EComparator.min,2,n,Es);
+    }
+
+    public Condition min3(int n,String Es){
+        return around(EComparator.min,3,n,Es);
+    }
+
+    public Condition min4(int n,String Es){
+        return around(EComparator.min,4,n,Es);
     }
 
     public Condition max2(int n,String Es){
@@ -125,6 +136,21 @@ public class RulesBuilder {
         }
         return c;
     }
+
+    public Condition moreThan(String As, String Bs){
+        return new MoreThanCondition(Element.get(E,As),Element.get(E,Bs));
+    }
+
+    public Condition moreThan(String As, String Bs,int radius){
+        return new MoreThanCondition(Element.get(E,As),Element.get(E,Bs),radius);
+    }
+
+    public Condition moreThan(String As,int radiusA, String Bs,int radiusB){
+        return new MoreThanCondition(Element.get(E,As),radiusA,Element.get(E,Bs),radiusB);
+    }
+
+
+
 
     public Condition around(EComparator comp,int radius,int n,String Es){
         Element[] elements = Helper.getElementsFromString(E,Es);
@@ -161,6 +187,7 @@ public class RulesBuilder {
     }
 
     public void setE(ElementCollector e) {
+        e.finish();
         E = e;
     }
 

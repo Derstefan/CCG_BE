@@ -9,6 +9,8 @@ public class EType {
 
     private String color = null;
 
+    private String[] tags = new String[0];
+
     private boolean isBasic = false;
 
     public EType(String name) {
@@ -27,6 +29,14 @@ public class EType {
         this.name = name;
         this.color = color;
         this.description = description;
+        this.isBasic = isBasic;
+
+    }
+    public EType(String name, String color,String description,boolean isBasic, String ... tags) {
+        this.name = name;
+        this.color = color;
+        this.description = description;
+        this.tags = tags;
         this.isBasic = isBasic;
     }
 
@@ -51,7 +61,9 @@ public class EType {
     }
 
 
-
+    public String[] getTags() {
+        return tags;
+    }
 
     public String toString(){
         return name;

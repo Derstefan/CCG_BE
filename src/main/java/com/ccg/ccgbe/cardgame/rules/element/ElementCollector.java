@@ -1,6 +1,7 @@
 package com.ccg.ccgbe.cardgame.rules.element;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 import java.util.function.Predicate;
 
@@ -92,7 +93,7 @@ public class ElementCollector {
                 return e;
             }
         }
-        return null;
+    throw new IllegalArgumentException("No such Element exists: " + typeName);
     }
 
     public EType TYPE(String typeName){
@@ -106,6 +107,23 @@ public class ElementCollector {
 
     public Element getRandom(){
         return elements.get(r.nextInt(elements.size()));
+    }
+
+
+    public Element getRandomFrom(String from){
+        ArrayList<Element> fromElements = getCardsFrom(from);
+        if(fromElements.size()==0)throw new IllegalArgumentException("No such Cardtype found: "+from);
+        return fromElements.get(r.nextInt(fromElements.size()));
+    }
+
+    public ArrayList<Element> getCardsFrom(String from){
+        ArrayList<Element> fromElements = new ArrayList<>();
+        for(Element e:elements){
+            if(Arrays.stream(e.getType().getTags()).anyMatch(tag -> from.equals(tag))){
+                fromElements.add(e);
+            }
+        }
+        return fromElements;
     }
 
     public ArrayList<Element> getBasicElements(){

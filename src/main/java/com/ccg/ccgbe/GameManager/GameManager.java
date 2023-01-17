@@ -31,13 +31,13 @@ public class GameManager {
         SimpleCardBuilder b = new SimpleCardBuilder(ruleLibrary.getE());
 
 
-        Deck d1 = new Deck(b.getRandomWxHCards(800,3,3));
-        Deck d2 = new Deck(b.getRandomWxHCards(800,3,3));
-        Deck d3 = new Deck(b.getRandomWxHCards(800,3,3));
+        Deck d1 = new Deck(b.getRandomWxHCards(800,3,3,"Orks"));
+        Deck d2 = new Deck(b.getRandomWxHCards(800,3,3,"Human"));
+        Deck d3 = new Deck(b.getRandomWxHCards(800,3,3,"elf"));
 
-        Player p1 = new Player("hans",d1);
-        Player p2 = new Player("peter",d2);
-        Player p3 = new Player("ursel",d3);
+        Player p1 = new Player("hanspeterOrk",d1);
+        Player p2 = new Player("heinrichMensch",d2);
+        Player p3 = new Player("elfriede",d3);
 
 
         CardGame game = new CardGame(new ArrayList<>(Arrays.asList(p1,p2,p3)), ruleLibrary,lb.generateMap());

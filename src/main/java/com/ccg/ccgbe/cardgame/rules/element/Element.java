@@ -1,12 +1,10 @@
 package com.ccg.ccgbe.cardgame.rules.element;
 
 import com.ccg.ccgbe.cardgame.rules.functions.FunctionManager;
+import com.ccg.ccgbe.cardgame.rules.functions.OnEndroundFunction;
+import com.ccg.ccgbe.cardgame.rules.functions.OnEventFunction;
 import com.ccg.ccgbe.cardgame.state.CardGameState;
 import com.ccg.ccgbe.cardgame.state.map.Pos;
-
-import java.util.ArrayList;
-import java.util.function.BiFunction;
-import java.util.function.Function;
 
 public class Element {
     private EType type;
@@ -30,6 +28,18 @@ public class Element {
 
     public FunctionManager getFunc() {
         return func;
+    }
+
+    public void addOnPlacementFunction(OnEventFunction f){
+        func.addOnPlacementFunction(f);
+    }
+
+    public void addOnRemovingFunction(OnEventFunction f){
+        func.addOnRemoveFunction(f);
+    }
+
+    public void addOnEndroundFunction(OnEndroundFunction f){
+        func.add(f);
     }
 
     public boolean performsOnPlacement() {
@@ -66,5 +76,15 @@ public class Element {
         if(element==null) return false;
         return type.equals(element.type);
 
+    }
+
+    public static Element[] get(ElementCollector E,String Es){
+        String[] elementsStrings = Es.split(",\\s*");
+        Element[] elements = new Element[elementsStrings.length];
+
+        for (int i = 0; i < elementsStrings.length; i++) {
+            elements[i]=E.get(elementsStrings[i]);
+        }
+        return elements;
     }
 }

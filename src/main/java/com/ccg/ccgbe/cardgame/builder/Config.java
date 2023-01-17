@@ -2,8 +2,8 @@ package com.ccg.ccgbe.cardgame.builder;
 
 public class Config {
 
-    public static final int DEFAULT_WIDTH = 50;
-    public static final int DEFAULT_HEIGHT = 70;
+    public static final int DEFAULT_WIDTH = 25;
+    public static final int DEFAULT_HEIGHT = 40;
 
     public static final int DECK_MIN_SIZE = 10;
     public static final int DECK_MAX_SIZE = 800000;

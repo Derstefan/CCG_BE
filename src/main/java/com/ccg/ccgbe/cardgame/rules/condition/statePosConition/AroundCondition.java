@@ -94,7 +94,7 @@ public class AroundCondition extends StatePosCondition{
         if(radius>1)str+= "in radius of " + radius +" ";
         str+= " " + comp + " ";
         str+= number + " ";
-        str += sb.substring(1).toString() +")";
+        str += sb.substring(1) +")";
         return  str;
     }
 }

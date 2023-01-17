@@ -1,15 +1,13 @@
 package com.ccg.ccgbe.cardgame.builder.landscapeBuilder.functions;
 
-import com.ccg.ccgbe.cardgame.builder.Helper;
 import com.ccg.ccgbe.cardgame.rules.condition.Condition;
-import com.ccg.ccgbe.cardgame.rules.condition.operations.AndCondition;
 import com.ccg.ccgbe.cardgame.rules.condition.statePosConition.AroundCondition;
 import com.ccg.ccgbe.cardgame.rules.condition.statePosConition.AroundDirectCondition;
 import com.ccg.ccgbe.cardgame.rules.condition.statePosConition.EComparator;
 import com.ccg.ccgbe.cardgame.rules.condition.statePosConition.ElementAtCondition;
 import com.ccg.ccgbe.cardgame.rules.element.Element;
 import com.ccg.ccgbe.cardgame.rules.element.ElementCollector;
-import com.ccg.ccgbe.cardgame.rules.functions.PerformEarchRoundFunction;
+import com.ccg.ccgbe.cardgame.rules.functions.OnEndroundFunction;
 import com.ccg.ccgbe.cardgame.rules.functions.StatePosParam;
 import com.ccg.ccgbe.cardgame.state.CardGameState;
 import com.ccg.ccgbe.cardgame.state.map.Pos;
@@ -26,8 +24,8 @@ public class LandscapeFunctions {
         E = e;
     }
 
-    public PerformEarchRoundFunction RIVER_FLOW_FUNCTION(Element flowElement, Element[] flowOverElements,Element[] stopElements) {
-        return new PerformEarchRoundFunction("Riverflow", new Function<>() {
+    public OnEndroundFunction RIVER_FLOW_FUNCTION(Element flowElement, Element[] flowOverElements, Element[] stopElements) {
+        return new OnEndroundFunction("Riverflow", new Function<>() {
             @Override
             public Void apply(StatePosParam statePosParam) {
                 CardGameState state = statePosParam.getState();
