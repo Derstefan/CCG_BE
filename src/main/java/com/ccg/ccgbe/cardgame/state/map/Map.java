@@ -38,7 +38,7 @@ public class Map {
                 mapData[i][j] = map.getCell(pos).clone();
             }
         }
-        this.mapData = map.getMapData();
+        this.mapData = mapData;
     }
 
     public int getWidth() {

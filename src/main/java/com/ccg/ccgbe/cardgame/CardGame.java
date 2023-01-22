@@ -1,14 +1,13 @@
 package com.ccg.ccgbe.cardgame;
 
 
-import com.ccg.ccgbe.cardgame.builder.Config;
+import com.ccg.ccgbe.library.Config;
 import com.ccg.ccgbe.cardgame.card.Card;
 import com.ccg.ccgbe.cardgame.draw.DoNothingDraw;
 import com.ccg.ccgbe.cardgame.draw.Draw;
 import com.ccg.ccgbe.cardgame.draw.PlaceCardDraw;
 import com.ccg.ccgbe.cardgame.player.Player;
 import com.ccg.ccgbe.cardgame.rules.RuleLibrary;
-import com.ccg.ccgbe.cardgame.rules.rule.Rule;
 import com.ccg.ccgbe.cardgame.state.CardGameState;
 import com.ccg.ccgbe.cardgame.state.map.Map;
 import com.ccg.ccgbe.dto.GameDataDTO;

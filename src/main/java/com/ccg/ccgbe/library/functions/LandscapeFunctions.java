@@ -1,4 +1,4 @@
-package com.ccg.ccgbe.cardgame.builder.landscapeBuilder.functions;
+package com.ccg.ccgbe.library.functions;
 
 import com.ccg.ccgbe.cardgame.rules.condition.Condition;
 import com.ccg.ccgbe.cardgame.rules.condition.statePosConition.AroundCondition;

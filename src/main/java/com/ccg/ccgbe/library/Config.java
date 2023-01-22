@@ -1,4 +1,4 @@
-package com.ccg.ccgbe.cardgame.builder;
+package com.ccg.ccgbe.library;
 
 public class Config {
 

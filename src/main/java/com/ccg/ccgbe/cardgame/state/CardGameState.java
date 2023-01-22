@@ -5,7 +5,6 @@ package com.ccg.ccgbe.cardgame.state;
 import com.ccg.ccgbe.cardgame.card.Card;
 import com.ccg.ccgbe.cardgame.events.EventHistroy;
 import com.ccg.ccgbe.cardgame.rules.RuleLibrary;
-import com.ccg.ccgbe.cardgame.rules.element.EType;
 import com.ccg.ccgbe.cardgame.rules.element.Element;
 import com.ccg.ccgbe.cardgame.rules.rule.PerformingRule;
 import com.ccg.ccgbe.cardgame.rules.rule.Rule;
@@ -72,7 +71,7 @@ public class CardGameState {
     }
 
     public void updateMap(){
-        this.map = tempMap;
+        this.map = tempMap.clone();
         tempMap = map.clone();
     }
 
@@ -80,11 +79,13 @@ public class CardGameState {
         Optional<Rule> opt = ruleLibrary.can(element,this,pos);
 
         if(opt.isPresent()){
+
             Element beforeElement =getElementAt(pos);
             Rule rule= opt.get();
 
             if(rule.check(this,pos)){
                 tempMap.put(element,pos);
+
                 if(rule instanceof PerformingRule){
                     ((PerformingRule) rule).perform(this,pos);
                 }
@@ -103,12 +104,13 @@ public class CardGameState {
                 Pos p = new Pos(i, j);
                 if (isOnMap(p.plus(pos)) && o[i][j] != null) {
                     placeElement(o[i][j], p.plus(pos));
+                    log.info("Placing {} at {}", o[i][j], p.plus(pos));
                 }
             }
         }
         updateMap();
+        log.info("updated");
     }
-
 
 
     public void performEndRoundFunctions(){
@@ -155,7 +157,7 @@ public class CardGameState {
                 Pos pos = new Pos(i,j);
                 map.getCell(pos).clearPossibleChanges();
                 for(Rule r: ruleLibrary.getRulesWithpossibleChange(this,pos)){
-                    map.getCell(pos).addPossibleChanges(r.getElement().getType());
+                    map.getCell(pos).addPossibleChanges(r.getElement().getId());
                 }
             }
         }
@@ -184,9 +186,6 @@ public class CardGameState {
         this.tempMap=map.clone();
     }
 
-    public Element getElement(EType type){
-        return ruleLibrary.getE().get(type);
-    }
 
     public RuleLibrary getRules() {
         return ruleLibrary;

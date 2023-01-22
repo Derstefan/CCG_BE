@@ -1,6 +1,6 @@
 package com.ccg.ccgbe.cardgame.builder;
 
-import com.ccg.ccgbe.cardgame.builder.Config;
+import com.ccg.ccgbe.library.Config;
 import com.ccg.ccgbe.cardgame.rules.RuleLibrary;
 import com.ccg.ccgbe.cardgame.rules.element.ElementCollector;
 import com.ccg.ccgbe.cardgame.rules.rule.Rule;

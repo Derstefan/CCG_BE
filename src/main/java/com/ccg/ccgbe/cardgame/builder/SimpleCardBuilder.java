@@ -43,7 +43,7 @@ public class SimpleCardBuilder {
 
         for(int i=0;i<maxNumber;i++){
             int r = rand.nextInt(maxNumber);
-            map.put(new Pos(r/h,r%h), E.getRandomFrom(from));
+            map.put(new Pos(r/h,r%h), E.getRandomFromFraction(from));
         }
 
         Card card = new Card(w,h,map);

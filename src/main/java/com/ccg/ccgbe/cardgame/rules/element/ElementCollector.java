@@ -1,5 +1,7 @@
 package com.ccg.ccgbe.cardgame.rules.element;
 
+import com.ccg.ccgbe.cardgame.rules.element.attribute.FractionAttribute;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
@@ -7,11 +9,7 @@ import java.util.function.Predicate;
 
 public class ElementCollector {
 
-
-    //TODO: überarbeiten!!! optimieren type vs element....
     private ArrayList<Element> elements = new ArrayList<>();
-
-    private ArrayList<EType> types = new ArrayList<>();
 
     private Random r;
 
@@ -23,86 +21,53 @@ public class ElementCollector {
         this.r=new Random(seed);
     }
 
+
+
+
     public ArrayList<Element> getAllElements() {
         return elements;
     }
 
-    public void addTypes(String ... typeNames){
-        for(String typeName:typeNames){
-            if(!typeAlreadyExists(typeName)){
 
-                types.add(new EType(typeName));
-            }
-        }
-    }
-
-
-    public void add(EType type) {
-        if(typeAlreadyExists(type.getName())){
-            return;
-        }
-        types.add(type);
-    }
 
     public void add(Element element) {
-        if(containsElement(element.getType().getName())){
+        if(containsElement(element.getId())){
             return;
         }
-        types.add(element.getType());
         elements.add(element);
     }
-    public void add(String typeName) {
-        if(typeAlreadyExists(typeName)){
-            return;
-        }
-        EType type = new EType(typeName);
-        types.add(type);
-        elements.add(new Element(type));
-    }
 
-    private boolean typeAlreadyExists(String typeName){
-        for(EType t: types){
-            if(typeName.equals(t.getName())){
+
+    public boolean containsElement(String id){
+        for(Element e: elements){
+            if(id.equals(e.getId())){
                 return true;
             }
         }
         return false;
     }
 
-    public boolean containsElement(String typeName){
-        for(Element e: elements){
-            if(typeName.equals(e.getType().getName())){
-                return true;
-            }
-        }
-        return false;
-    }
 
-    public Element get(EType type){
+    public Element get(String id){
         for(Element e: elements){
-            if(type.equals(e.getType())){
+            if(id.equals(e.getId())){
                 return e;
             }
         }
-        return null;
+        throw new IllegalArgumentException("No such Element exists: " + id);
+
     }
 
-    public Element get(String typeName){
-        for(Element e: elements){
-            if(e.getType().getName().equals(typeName)){
-                return e;
-            }
-        }
-    throw new IllegalArgumentException("No such Element exists: " + typeName);
-    }
 
-    public EType TYPE(String typeName){
-        for(EType t: types){
-            if(typeName.equals(t.getName())){
-                return t;
+
+    public ArrayList<Element> getElements(Predicate<Element> predicate){
+        ArrayList<Element> elements = new ArrayList<>();
+        for(Element e: this.elements){
+            if(predicate.test(e)){
+                elements.add(e);
             }
         }
-        return null;
+        return elements;
     }
 
     public Element getRandom(){
@@ -110,27 +75,34 @@ public class ElementCollector {
     }
 
 
-    public Element getRandomFrom(String from){
-        ArrayList<Element> fromElements = getCardsFrom(from);
-        if(fromElements.size()==0)throw new IllegalArgumentException("No such Cardtype found: "+from);
+    public Element getRandomFromFraction(String fraction){
+        ArrayList<Element> fromElements = getCardsFrom(fraction);
+        if(fromElements.size()==0)throw new IllegalArgumentException("No such Fraction found: "+fraction);
         return fromElements.get(r.nextInt(fromElements.size()));
     }
 
-    public ArrayList<Element> getCardsFrom(String from){
+    public ArrayList<Element> getCardsFrom(String fraction){
         ArrayList<Element> fromElements = new ArrayList<>();
         for(Element e:elements){
-            if(Arrays.stream(e.getType().getTags()).anyMatch(tag -> from.equals(tag))){
+            if(Arrays.stream(e.getAttributes()).anyMatch(attribute -> {
+                if(attribute instanceof FractionAttribute){
+                    return ((FractionAttribute) attribute).getFractionName().equals(fraction);
+                }
+                return false;
+            })){
                 fromElements.add(e);
             }
         }
         return fromElements;
     }
 
+
+
     public ArrayList<Element> getBasicElements(){
 
         ArrayList<Element> basicElements = new ArrayList<>();
         for(Element e:elements){
-            if(e.getType().isBasic()){
+            if(e.isBasic()){
                 basicElements.add(e);
             }
         }
@@ -143,14 +115,7 @@ public class ElementCollector {
         return basicElements.get(r.nextInt(basicElements.size()));
     }
 
-    public void finish(){
-        for(EType t:types){
 
-            if(!containsElement(t.getName())){
-                elements.add(new Element(t));
-            }
-        }
-    }
 
 
 

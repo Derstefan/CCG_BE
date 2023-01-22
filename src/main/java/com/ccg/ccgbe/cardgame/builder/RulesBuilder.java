@@ -9,6 +9,7 @@ import com.ccg.ccgbe.cardgame.rules.element.Element;
 import com.ccg.ccgbe.cardgame.rules.element.ElementCollector;
 import com.ccg.ccgbe.cardgame.rules.rule.Rule;
 import com.ccg.ccgbe.cardgame.state.map.Pos;
+import com.ccg.ccgbe.library.Config;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -187,7 +188,6 @@ public class RulesBuilder {
     }
 
     public void setE(ElementCollector e) {
-        e.finish();
         E = e;
     }
 
