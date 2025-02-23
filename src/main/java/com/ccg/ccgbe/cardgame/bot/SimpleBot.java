@@ -1,7 +1,6 @@
 package com.ccg.ccgbe.cardgame.bot;
 
 import com.ccg.ccgbe.cardgame.CardGame;
-import com.ccg.ccgbe.cardgame.builder.Config;
 import com.ccg.ccgbe.cardgame.draw.DoNothingDraw;
 import com.ccg.ccgbe.cardgame.draw.Draw;
 import com.ccg.ccgbe.cardgame.draw.PlaceCardDraw;

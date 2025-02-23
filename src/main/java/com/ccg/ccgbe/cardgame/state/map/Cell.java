@@ -1,6 +1,5 @@
 package com.ccg.ccgbe.cardgame.state.map;
 
-import com.ccg.ccgbe.cardgame.rules.element.EType;
 import com.ccg.ccgbe.cardgame.rules.element.Element;
 import lombok.extern.slf4j.Slf4j;
 
@@ -12,7 +11,7 @@ public class Cell {
     private Element element;
     private Pos pos;
 
-    private HashSet<EType> possibleChanges = new HashSet<>();
+    private HashSet<String> possibleChanges = new HashSet<>();
 
     public Cell(Element element,Pos pos) {
         this.pos = pos;
@@ -40,15 +39,15 @@ public class Cell {
         return new Cell(element,pos);
     }
 
-    public HashSet<EType> getPossibleChanges() {
+    public HashSet<String> getPossibleChanges() {
         return possibleChanges;
     }
 
-    public void addPossibleChanges(EType type) {
-        if(type.equals(element.getType())){
-            log.error("same elemets " + type.toString() + " and " +element.getType().toString());
+    public void addPossibleChanges(String elementId) {
+        if(elementId.equals(element.getId())){
+            log.error("same elemets " + elementId.toString() + " and " +element.toString());
         }
-        this.possibleChanges.add(type);
+        this.possibleChanges.add(elementId);
     }
 
     public void clearPossibleChanges(){

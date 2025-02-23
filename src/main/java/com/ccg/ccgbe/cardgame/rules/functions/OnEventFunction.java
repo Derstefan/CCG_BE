@@ -6,21 +6,21 @@ import com.ccg.ccgbe.cardgame.state.map.Pos;
 
 import java.util.function.Function;
 
-public class OnPlacementFunction {
+public class OnEventFunction {
 
 
     private String name;
 
-    //first Placement then apply (Element-param is the old Element on Pos)
-    private Function<StateElementPosParam,Void> functionOnPlacement;
+    //first Event then apply (Element-param is the old Element on Pos)
+    private Function<StateElementPosParam,Void> func;
 
-    public OnPlacementFunction(String name, Function<StateElementPosParam, Void> functionsOnPlacement) {
+    public OnEventFunction(String name, Function<StateElementPosParam, Void> func) {
         this.name = name;
-        this.functionOnPlacement = functionsOnPlacement;
+        this.func = func;
     }
 
     public Function<StateElementPosParam, Void> getFunctionOnPlacement() {
-        return functionOnPlacement;
+        return func;
     }
 
     public String getName() {
@@ -28,6 +28,6 @@ public class OnPlacementFunction {
     }
 
     public void apply(CardGameState state, Element beforeElement, Pos pos){
-        functionOnPlacement.apply(new StateElementPosParam(state,beforeElement,pos));
+        func.apply(new StateElementPosParam(state,beforeElement,pos));
     }
 }

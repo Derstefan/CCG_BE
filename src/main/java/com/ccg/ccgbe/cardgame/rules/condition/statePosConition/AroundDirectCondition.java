@@ -37,7 +37,7 @@ public class AroundDirectCondition extends StatePosCondition{
     public boolean check(CardGameState state) {
         Pos pos = getPos();
         int num=0;
-        Pos[] ps = new Pos[]{new Pos(-1,0),new Pos(0,-1),new Pos(1,0),new Pos(0,1)};
+        Pos[] ps = new Pos[]{Pos.TOP,Pos.RIGHT,Pos.BOTTOM,Pos.LEFT};
         for(Pos p:ps){
             Pos indexPos = pos.plus(p);
                if(state.isOnMap(indexPos)){

@@ -30,6 +30,7 @@ public class AndCondition extends Condition {
 
     @Override
     public void setPos(Pos pos){
+        //setPos?
         cond1.setPos(pos);
         cond2.setPos(pos);
     }

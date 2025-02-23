@@ -4,8 +4,7 @@ package com.ccg.ccgbe.cardgame.state;
 
 import com.ccg.ccgbe.cardgame.card.Card;
 import com.ccg.ccgbe.cardgame.events.EventHistroy;
-import com.ccg.ccgbe.cardgame.rules.Rules;
-import com.ccg.ccgbe.cardgame.rules.element.EType;
+import com.ccg.ccgbe.cardgame.rules.RuleLibrary;
 import com.ccg.ccgbe.cardgame.rules.element.Element;
 import com.ccg.ccgbe.cardgame.rules.rule.PerformingRule;
 import com.ccg.ccgbe.cardgame.rules.rule.Rule;
@@ -25,22 +24,22 @@ public class CardGameState {
 
     private Map tempMap;
 
-    private Rules rules;
+    private RuleLibrary ruleLibrary;
 
     //toEstage
     private boolean gameEnded = false;
 
     private EventHistroy eventHistroy = new EventHistroy();
 
-    public CardGameState(Rules rules, int w, int h) {
-        this.rules=rules;
+    public CardGameState(RuleLibrary ruleLibrary, int w, int h) {
+        this.ruleLibrary = ruleLibrary;
         //map = new Element[Config.DEFAULT_WIDTH][Config.DEFAULT_HEIGHT];
         this.map = new Map(w,h);
         tempMap = map.clone();
     }
 
-    public CardGameState(Rules rules, Map map) {
-        this.rules=rules;
+    public CardGameState(RuleLibrary ruleLibrary, Map map) {
+        this.ruleLibrary = ruleLibrary;
         //map = new Element[Config.DEFAULT_WIDTH][Config.DEFAULT_HEIGHT];
         this.map = map;
         tempMap = map.clone();
@@ -61,20 +60,32 @@ public class CardGameState {
         updateMap();
     }
 
+    /**
+     * Put Element at position without eny neccesary Rule
+     * @param element
+     * @param pos
+     */
+    public void placeElementWithoutRuleAndUpdate(Element element, Pos pos){
+        put(element,pos);
+        updateMap();
+    }
+
     public void updateMap(){
-        this.map = tempMap;
+        this.map = tempMap.clone();
         tempMap = map.clone();
     }
 
     private void placeElement(Element element, Pos pos){
-        Optional<Rule> opt = rules.can(element,this,pos);
+        Optional<Rule> opt = ruleLibrary.can(element,this,pos);
 
         if(opt.isPresent()){
+
             Element beforeElement =getElementAt(pos);
             Rule rule= opt.get();
 
             if(rule.check(this,pos)){
                 tempMap.put(element,pos);
+
                 if(rule instanceof PerformingRule){
                     ((PerformingRule) rule).perform(this,pos);
                 }
@@ -93,12 +104,13 @@ public class CardGameState {
                 Pos p = new Pos(i, j);
                 if (isOnMap(p.plus(pos)) && o[i][j] != null) {
                     placeElement(o[i][j], p.plus(pos));
+                    log.info("Placing {} at {}", o[i][j], p.plus(pos));
                 }
             }
         }
         updateMap();
+        log.info("updated");
     }
-
 
 
     public void performEndRoundFunctions(){
@@ -110,7 +122,7 @@ public class CardGameState {
                     Pos pos = new Pos(i,j);
                     boolean cellUpdated = false;
 
-                    for(Rule automaticRule: rules.getAutomaticEuleSet()){
+                    for(Rule automaticRule: ruleLibrary.getAutomaticRuleSet()){
                         if(automaticRule.check(this,pos)){
                             Element newElement = automaticRule.getElement();
 
@@ -144,8 +156,8 @@ public class CardGameState {
             for (int j = 0; j < map.getHeight(); j++) {
                 Pos pos = new Pos(i,j);
                 map.getCell(pos).clearPossibleChanges();
-                for(Rule r:rules.getRulesWithpossibleChange(this,pos)){
-                    map.getCell(pos).addPossibleChanges(r.getElement().getType());
+                for(Rule r: ruleLibrary.getRulesWithpossibleChange(this,pos)){
+                    map.getCell(pos).addPossibleChanges(r.getElement().getId());
                 }
             }
         }
@@ -174,12 +186,9 @@ public class CardGameState {
         this.tempMap=map.clone();
     }
 
-    public Element getElement(EType type){
-        return rules.getE().get(type);
-    }
 
-    public Rules getRules() {
-        return rules;
+    public RuleLibrary getRules() {
+        return ruleLibrary;
     }
 
     public boolean isGameEnded() {
@@ -200,6 +209,7 @@ public class CardGameState {
 
 
     private void put(Element element, Pos pos){
+
         tempMap.put(element,pos);
     }
 

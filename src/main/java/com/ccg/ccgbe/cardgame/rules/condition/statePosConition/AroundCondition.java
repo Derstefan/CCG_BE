@@ -68,6 +68,7 @@ public class AroundCondition extends StatePosCondition{
         int num=0;
         for(int i=-1*radius;i<=1*radius;i++){
             for(int j=-1*radius;j<=1*radius;j++){
+                if(i==j && i==0)continue;
                 Pos indexPos = pos.plus(new Pos(i,j));
                 if(state.isOnMap(indexPos)){
                     Element indexElement = state.getElementAt(indexPos);
@@ -82,10 +83,18 @@ public class AroundCondition extends StatePosCondition{
         }
         return false;
     }
+
+
+
     @Override
     public String toString(){
+        String str = "( around ";
         StringBuilder sb = new StringBuilder("");
         Arrays.stream(aroundElements).forEach(s->sb.append(","+s));
-        return comp + "" + radius + "(" +number+","+ sb.toString() +")";
+        if(radius>1)str+= "in radius of " + radius +" ";
+        str+= " " + comp + " ";
+        str+= number + " ";
+        str += sb.substring(1) +")";
+        return  str;
     }
 }

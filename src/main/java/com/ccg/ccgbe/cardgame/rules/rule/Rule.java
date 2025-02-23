@@ -9,12 +9,16 @@ import com.ccg.ccgbe.cardgame.state.map.Pos;
 public class Rule {
 
     private Element element;
+
+    private Element beforeElement;
+
     private Condition condition;
 
     private String description = "";
 
-    public Rule(Element element, Condition condition) {
+    public Rule(Element element,Element beforeElement, Condition condition) {
         this.element = element;
+        this.beforeElement = beforeElement;
         this.condition = condition;
     }
 
@@ -23,12 +27,18 @@ public class Rule {
     }
 
     public boolean check(CardGameState state, Pos pos) {
-        condition.setPos(pos);
-        return condition.check(state);
+        if(state.getElementAt(pos).equals(beforeElement)){
+            condition.setPos(pos);
+            return condition.check(state);
+        }
+        return false;
     }
 
 
     public String getDescription() {
+        if("".equals(description)){
+            description=condition.toString();
+        }
         return description;
     }
 
@@ -38,6 +48,10 @@ public class Rule {
 
     public Condition getCondition() {
         return condition;
+    }
+
+    public Element getBeforeElement() {
+        return beforeElement;
     }
 
     public String toString(){

@@ -1,4 +1,4 @@
-package com.ccg.ccgbe.cardgame.builder.core;
+package com.ccg.ccgbe.cardgame.builder;
 
 import com.ccg.ccgbe.cardgame.card.Card;
 import com.ccg.ccgbe.cardgame.rules.element.Element;
@@ -28,6 +28,22 @@ public class SimpleCardBuilder {
         for(int i=0;i<maxNumber;i++){
             int r = rand.nextInt(maxNumber);
             map.put(new Pos(r/h,r%h), E.getRandom());
+        }
+
+        Card card = new Card(w,h,map);
+        return card;
+    }
+
+    public Card getRandomCard(int w, int h,String from){
+
+        HashMap<Pos, Element> map = new HashMap<>();
+
+        int maxNumber = w*h;
+        Random rand = new Random();
+
+        for(int i=0;i<maxNumber;i++){
+            int r = rand.nextInt(maxNumber);
+            map.put(new Pos(r/h,r%h), E.getRandomFromFraction(from));
         }
 
         Card card = new Card(w,h,map);
@@ -72,6 +88,14 @@ public class SimpleCardBuilder {
         ArrayList<Card> cards = new ArrayList<>();
         for(int i=0;i<number;i++){
             cards.add(getRandomCard(rand1(w),rand1(h)));
+        }
+        return cards;
+    }
+
+    public ArrayList<Card> getRandomWxHCards(int number,int w, int h,String from){
+        ArrayList<Card> cards = new ArrayList<>();
+        for(int i=0;i<number;i++){
+            cards.add(getRandomCard(rand1(w),rand1(h),from));
         }
         return cards;
     }

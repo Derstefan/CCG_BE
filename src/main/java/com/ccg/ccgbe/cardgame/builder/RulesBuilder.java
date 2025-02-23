@@ -1,14 +1,15 @@
-package com.ccg.ccgbe.cardgame.builder.core;
+package com.ccg.ccgbe.cardgame.builder;
 
-import com.ccg.ccgbe.cardgame.builder.Config;
 import com.ccg.ccgbe.cardgame.rules.condition.Condition;
 import com.ccg.ccgbe.cardgame.rules.condition.operations.AlwaysTrueCondition;
 import com.ccg.ccgbe.cardgame.rules.condition.operations.PropabilityCondition;
 import com.ccg.ccgbe.cardgame.rules.condition.statePosConition.*;
+import com.ccg.ccgbe.cardgame.rules.condition.statePosConition.fight.MoreThanCondition;
 import com.ccg.ccgbe.cardgame.rules.element.Element;
 import com.ccg.ccgbe.cardgame.rules.element.ElementCollector;
 import com.ccg.ccgbe.cardgame.rules.rule.Rule;
 import com.ccg.ccgbe.cardgame.state.map.Pos;
+import com.ccg.ccgbe.library.Config;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -43,7 +44,6 @@ public class RulesBuilder {
         for (int i = 0; i < eStr.length; i++) {
             elements[i]=E.get(eStr[i]);
             if(elements[i]==null)throw new IllegalArgumentException(eStr[i] +" is no Element");
-            conditions[i]=new ElementCondition(elements[i]);
         }
         return this;
     }
@@ -60,7 +60,7 @@ public class RulesBuilder {
     public RulesBuilder when(Condition condition){
 
         for (int i = 0; i < conditions.length; i++) {
-            conditions[i] = conditions[i].AND(condition);
+            conditions[i] = condition;
         }
 
         return this;
@@ -70,6 +70,8 @@ public class RulesBuilder {
     public Condition min(int n,String Es){
         return around(EComparator.min,1,n,Es);
     }
+
+
 
     public Condition max(int n,String Es){
         return around(EComparator.max,1,n,Es);
@@ -95,6 +97,14 @@ public class RulesBuilder {
         return around(EComparator.min,2,n,Es);
     }
 
+    public Condition min3(int n,String Es){
+        return around(EComparator.min,3,n,Es);
+    }
+
+    public Condition min4(int n,String Es){
+        return around(EComparator.min,4,n,Es);
+    }
+
     public Condition max2(int n,String Es){
         return around(EComparator.max,2,n,Es);
     }
@@ -108,7 +118,8 @@ public class RulesBuilder {
     }*/
 
     public Condition at(Pos vec, String A){
-        return new ElementAtCondition(E.get(A),vec);
+
+        return new ElementAtCondition(vec,E.get(A));
     }
 
     public Condition wsk(double probability){
@@ -127,13 +138,23 @@ public class RulesBuilder {
         return c;
     }
 
-    public Condition around(EComparator comp,int radius,int n,String Es){
-        String[] elementsStrings = Es.split(",\\s*");
-        Element[] elements = new Element[elementsStrings.length];
+    public Condition moreThan(String As, String Bs){
+        return new MoreThanCondition(Element.get(E,As),Element.get(E,Bs));
+    }
 
-        for (int i = 0; i < elementsStrings.length; i++) {
-            elements[i]=E.get(elementsStrings[i]);
-        }
+    public Condition moreThan(String As, String Bs,int radius){
+        return new MoreThanCondition(Element.get(E,As),Element.get(E,Bs),radius);
+    }
+
+    public Condition moreThan(String As,int radiusA, String Bs,int radiusB){
+        return new MoreThanCondition(Element.get(E,As),radiusA,Element.get(E,Bs),radiusB);
+    }
+
+
+
+
+    public Condition around(EComparator comp,int radius,int n,String Es){
+        Element[] elements = Helper.getElementsFromString(E,Es);
         return new AroundCondition(comp,radius,n,elements);
     }
 
@@ -150,13 +171,21 @@ public class RulesBuilder {
     public ArrayList<Rule> create(){
         ArrayList<Rule> ruleSet = new ArrayList<>();
         for (int i = 0; i < elements.length; i++) {
-            Rule r = new Rule(A,conditions[i]);
+            Rule r = new Rule(A,elements[i],conditions[i]);
             ruleSet.add(r);
 //            log.info(conditions[i].toString());
         }
         return ruleSet;
     }
 
+
+    public Element getElement(String A){
+        return E.get(A);
+    }
+
+    public Element[] getElements(String Es){
+        return Helper.getElementsFromString(E,Es);
+    }
 
     public void setE(ElementCollector e) {
         E = e;

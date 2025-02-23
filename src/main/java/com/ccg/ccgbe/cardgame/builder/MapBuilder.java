@@ -1,11 +1,8 @@
-package com.ccg.ccgbe.cardgame.builder.core;
+package com.ccg.ccgbe.cardgame.builder;
 
-import com.ccg.ccgbe.cardgame.builder.Config;
-import com.ccg.ccgbe.cardgame.rules.Rules;
-import com.ccg.ccgbe.cardgame.rules.condition.Condition;
-import com.ccg.ccgbe.cardgame.rules.element.Element;
+import com.ccg.ccgbe.library.Config;
+import com.ccg.ccgbe.cardgame.rules.RuleLibrary;
 import com.ccg.ccgbe.cardgame.rules.element.ElementCollector;
-import com.ccg.ccgbe.cardgame.rules.rule.PerformingRule;
 import com.ccg.ccgbe.cardgame.rules.rule.Rule;
 import com.ccg.ccgbe.cardgame.state.CardGameState;
 import com.ccg.ccgbe.cardgame.state.map.Cell;
@@ -14,7 +11,6 @@ import com.ccg.ccgbe.cardgame.state.map.Pos;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 
 @Slf4j
 public class MapBuilder {
@@ -57,7 +53,7 @@ public class MapBuilder {
     }
 
     public Map iterateRules(ArrayList<Rule> ruleSet, int iterations) {
-        CardGameState state = new CardGameState(new Rules(E, new ArrayList<>(),ruleSet, new ArrayList<>()), map.getWidth(),map.getHeight());
+        CardGameState state = new CardGameState(new RuleLibrary(E, new ArrayList<>(),ruleSet, new ArrayList<>()), map.getWidth(),map.getHeight());
         state.setMap(map);
         for (int index = 0; index < iterations; index++) {
             state.performEndRoundFunctions();

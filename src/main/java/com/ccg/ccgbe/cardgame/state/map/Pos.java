@@ -2,6 +2,18 @@ package com.ccg.ccgbe.cardgame.state.map;
 
 public class Pos {
 
+    public static final Pos TOP = new Pos(0,-1);
+    public static final Pos TOP_RIGHT = new Pos(1,-1);
+    public static final Pos RIGHT = new Pos(1,0);
+    public static final Pos BOTTOM_RIGHT = new Pos(1,1);
+    public static final Pos BOTTOM = new Pos(0,1);
+    public static final Pos BOTTOM_LEFT = new Pos(-1,1);
+    public static final Pos LEFT = new Pos(-1,0);
+    public static final Pos TOP_LEFT = new Pos(-1,-1);
+
+
+
+
     private int x;
     private int y;
 
@@ -33,6 +45,23 @@ public class Pos {
 
     public Pos plus(Pos pos){
         return new Pos(x+pos.getX(),y+pos.getY());
+    }
+
+
+    public Pos top(){
+       return this.plus(TOP);
+    }
+
+    public Pos bottom(){
+        return this.plus(BOTTOM);
+    }
+
+    public Pos right(){
+        return this.plus(RIGHT);
+    }
+
+    public Pos left(){
+        return this.plus(LEFT);
     }
 
 

@@ -1,7 +1,7 @@
 package com.ccg.ccgbe.cardgame.player;
 
 
-import com.ccg.ccgbe.cardgame.builder.Config;
+import com.ccg.ccgbe.library.Config;
 import com.ccg.ccgbe.cardgame.card.Card;
 import com.ccg.ccgbe.dto.PlayerDTO;
 
